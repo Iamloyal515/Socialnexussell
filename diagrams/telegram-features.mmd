@@ -1,0 +1,48 @@
+graph LR
+    subgraph "Core"
+        S1["Sessions & Overview"]
+        S2["Account Purchase"]
+    end
+
+    subgraph "Channels (8 tools)"
+        C1["Channel Validator"]
+        C2["Bulk Channel Joiner v2"]
+        C3["Bulk Channel Leaver"]
+        C4["Channel Reactions"]
+        C5["Channel Fetcher"]
+        C6["AddLink Creator"]
+    end
+
+    subgraph "Messaging (3 tools)"
+        M1["Auto-Reply"]
+        M2["Bulk Messaging"]
+        M3["Mass DM"]
+    end
+
+    subgraph "Management (3 tools)"
+        U1["Bulk User Adder"]
+        U2["Profile Changer"]
+        U3["Contact Manager"]
+    end
+
+    subgraph "Tools (4 tools)"
+        T1["Media Copier"]
+        T2["Mass Report"]
+        T3["Keyword Searcher"]
+        T4["Topic Chooser"]
+    end
+
+    subgraph "Infrastructure"
+        FW["Flood Wait Protection"]
+        AH["Account Health"]
+        SC["Smart Cooldown"]
+        CO["Content Orchestrator"]
+        TR["Task Restoration"]
+    end
+
+    S1 --> FW
+    C2 --> FW
+    C2 --> AH
+    M2 --> SC
+    M2 --> CO
+    M3 --> TR

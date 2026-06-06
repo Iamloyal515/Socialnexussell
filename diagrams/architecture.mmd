@@ -1,0 +1,64 @@
+graph TB
+    subgraph "Client Layer"
+        Browser["Browser (React 19 SPA)"]
+        Landing["Landing Page /"]
+        Dashboard["Dashboard /dashboard"]
+        Admin["Admin Panel /admin"]
+        POC["POC Page /poc"]
+    end
+
+    subgraph "Frontend (Port 3841)"
+        React["React + Tailwind + MUI"]
+        SSE_Client["SSE Client"]
+        SellAuth["SellAuth Checkout"]
+    end
+
+    subgraph "Backend (PM2 Fork)"
+        Express["Express API (461 endpoints)"]
+        Auth["License Key Auth"]
+        TierMW["Tier Enforcement"]
+        RateLimit["Rate Limiter"]
+        
+        subgraph "Telegram Engine"
+            GramJS["GramJS (MTProto)"]
+            FloodWait["Flood Wait Service"]
+            MultiAcct["Multi-Account Manager"]
+            TaskRestore["Task Restoration"]
+        end
+        
+        subgraph "Discord Engine"
+            DiscordJS["discord.js-selfbot"]
+        end
+        
+        WorkerPool["Worker Thread Pool"]
+        MemoryGuard["Memory Guard"]
+        DynConfig["Dynamic Config"]
+    end
+
+    subgraph "Data Layer"
+        MongoDB["MongoDB (26 models)"]
+        Redis["Redis (optional)"]
+        InMemory["In-Memory Maps (fallback)"]
+    end
+
+    Browser --> React
+    React --> Express
+    SSE_Client --> Express
+    
+    Express --> Auth --> TierMW --> RateLimit
+    RateLimit --> GramJS
+    RateLimit --> DiscordJS
+    
+    GramJS --> MongoDB
+    DiscordJS --> MongoDB
+    Express --> MongoDB
+    
+    RateLimit --> Redis
+    Redis -.->|fallback| InMemory
+    
+    WorkerPool --> GramJS
+    MemoryGuard --> InMemory
+    DynConfig --> Express
+    TaskRestore --> MongoDB
+
+    SellAuth --> Browser

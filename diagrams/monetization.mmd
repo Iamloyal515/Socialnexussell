@@ -1,0 +1,53 @@
+graph TD
+    subgraph "Acquisition"
+        Landing["Landing Page"]
+        Trial["30-Day Free Trial"]
+        SellAuth["SellAuth Checkout"]
+        Contact["Contact Form"]
+    end
+
+    subgraph "Trial Flow"
+        T1["Join @SocialNexusX"]
+        T2["Enter @username"]
+        T3["Auto-generate key"]
+        T4["30 days Tier 3 access"]
+    end
+
+    subgraph "Paid Tiers"
+        Tier1["Tier 1 Starter $5/mo"]
+        Tier2["Tier 2 Pro $10/mo"]
+        Tier3["Tier 3 Scale $15/mo"]
+        Lifetime["Lifetime $350"]
+        SelfServe["Self-Serve $10/yr or $50"]
+    end
+
+    subgraph "Enforcement"
+        Limits["limits.js"]
+        Middleware["tierEnforcement.js"]
+        Usage["Usage Tracking"]
+        Overrides["Admin Limit Overrides"]
+    end
+
+    subgraph "Admin Revenue"
+        KeyMgmt["Key CRUD"]
+        Monetization["Revenue Analytics (ready)"]
+        ChurnRisk["Churn Risk (ready)"]
+    end
+
+    Landing --> Trial
+    Landing --> SellAuth
+    Landing --> Contact
+
+    Trial --> T1 --> T2 --> T3 --> T4
+    T4 -->|converts| Tier3
+
+    SellAuth --> SelfServe
+    Tier1 --> Tier2 --> Tier3 --> Lifetime
+
+    Tier1 & Tier2 & Tier3 & Lifetime --> Limits
+    Limits --> Middleware --> Usage
+    Overrides --> Limits
+
+    KeyMgmt --> Tier1 & Tier2 & Tier3 & Lifetime
+    Monetization --> Usage
+    ChurnRisk --> Usage
